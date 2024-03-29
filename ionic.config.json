@@ -1,0 +1,7 @@
+{
+  "name": "pockee",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
