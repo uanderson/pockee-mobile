@@ -1,8 +1,15 @@
+import { initializeApp } from '@firebase/app';
+import { getAuth, onAuthStateChanged } from '@firebase/auth';
 import { IonApp, IonRouterOutlet, IonSplitPane, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
+import { useEffect } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import Menu from './components/Menu';
+import Login from './pages/Login';
 import Page from './pages/Page';
+import { useAppDispatch, useAppSelector } from './redux/hooks';
+import { selectIsAuthenticated, setAuthState } from './redux/slices/authSlice';
+import { firebaseConfig } from './services/firebase';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -24,25 +31,39 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 
 setupIonicReact();
+initializeApp(firebaseConfig);
 
 const App: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(getAuth(), user => dispatch(setAuthState(user)));
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <IonApp>
-      <IonReactRouter>
-        <IonSplitPane contentId="main">
-          <Menu />
-          <IonRouterOutlet id="main">
-            <Route path="/" exact={true}>
-              <Redirect to="/folder/Inbox" />
-            </Route>
-            <Route path="/folder/:name" exact={true}>
-              <Page />
-            </Route>
-          </IonRouterOutlet>
-        </IonSplitPane>
-      </IonReactRouter>
+      {isAuthenticated ? (
+        <IonReactRouter>
+          <IonSplitPane contentId="main">
+            <Menu/>
+            <IonRouterOutlet id="main">
+              <Route path="/" exact={true}>
+                <Redirect to="/folder/Inbox"/>
+              </Route>
+              <Route path="/folder/:name" exact={true}>
+                <Page/>
+              </Route>
+            </IonRouterOutlet>
+          </IonSplitPane>
+        </IonReactRouter>
+      ) : (
+        <Login/>
+      )}
     </IonApp>
   );
 };
 
-export default App;
+export default App
