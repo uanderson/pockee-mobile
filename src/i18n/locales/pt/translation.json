@@ -1,0 +1,13 @@
+{
+  "auth": {
+    "invalid": "Dados inválidos"
+  },
+  "dashboard": {
+    "title": "Dashboard"
+  },
+  "menu": {
+    "dashboard": "Dashboard"
+  },
+  "password": "Senha",
+  "sign-in": "Acessar"
+}
