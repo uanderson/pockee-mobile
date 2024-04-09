@@ -1,0 +1,14 @@
+{
+  "auth": {
+    "invalid": "Invalid credentials"
+  },
+  "dashboard": {
+    "title": "Dashboard"
+  },
+  "email": "Email",
+  "menu": {
+    "dashboard": "Dashboard"
+  },
+  "password": "Password",
+  "sign-in": "Sign in"
+}
